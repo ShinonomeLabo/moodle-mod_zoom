@@ -37,7 +37,8 @@ defined('MOODLE_INTERNAL') || die();
  * @param int $oldversion
  * @return bool
  */
-function xmldb_zoom_upgrade($oldversion) {
+function xmldb_zoom_upgrade($oldversion)
+{
     global $DB;
 
     $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
@@ -62,7 +63,7 @@ function xmldb_zoom_upgrade($oldversion) {
     if ($oldversion < 2015071500) {
         // Rename option_no_video_host to option_host_video; change default to 1; invert values.
         $field = new xmldb_field('option_no_video_host', XMLDB_TYPE_INTEGER, '1', null, null, null,
-                '1', 'option_start_type');
+            '1', 'option_start_type');
         // Invert option_no_video_host.
         $DB->set_field('UPDATE {zoom} SET option_no_video_host = 1 - option_no_video_host');
         $dbman->change_field_default($table, $field);
@@ -70,7 +71,7 @@ function xmldb_zoom_upgrade($oldversion) {
 
         // Rename option_no_video_participants to option_participants_video; change default to 1; invert values.
         $field = new xmldb_field('option_no_video_participants', XMLDB_TYPE_INTEGER, '1', null, null, null,
-                '1', 'option_host_video');
+            '1', 'option_host_video');
         // Invert option_no_video_participants.
         $DB->set_field('UPDATE {zoom} SET option_no_video_participants = 1 - option_no_video_participants');
         $dbman->change_field_default($table, $field);
@@ -325,13 +326,13 @@ function xmldb_zoom_upgrade($oldversion) {
 
         // First drop key, not needed anymore.
         $key = new xmldb_key('user_by_meeting_key', XMLDB_KEY_UNIQUE,
-                ['detailsid', 'zoomuserid']);
+            ['detailsid', 'zoomuserid']);
         $dbman->drop_key($table, $key);
 
         // Change of type for field zoomuserid to char(35).
         $field = new xmldb_field('zoomuserid', XMLDB_TYPE_CHAR,
-                '35', null, XMLDB_NOTNULL,
-                null, null, 'userid');
+            '35', null, XMLDB_NOTNULL,
+            null, null, 'userid');
         $dbman->change_field_type($table, $field);
 
         // Zoom savepoint reached.
@@ -374,7 +375,7 @@ function xmldb_zoom_upgrade($oldversion) {
         // Define field authenticated_users to be added to zoom.
         $table = new xmldb_table('zoom');
         $field = new xmldb_field('option_authenticated_users', XMLDB_TYPE_INTEGER,
-                '1', null, null, null, '0', 'option_waiting_room');
+            '1', null, null, null, '0', 'option_waiting_room');
 
         // Conditionally launch add field authenticated_users.
         if (!$dbman->field_exists($table, $field)) {
@@ -468,7 +469,7 @@ function xmldb_zoom_upgrade($oldversion) {
         // Define field option_encryption_type to be added to zoom.
         $table = new xmldb_table('zoom');
         $field = new xmldb_field('option_encryption_type', XMLDB_TYPE_CHAR, '20', null, null, null, 'enhanced_encryption',
-                'option_authenticated_users');
+            'option_authenticated_users');
 
         // Conditionally launch add field option_encryption_type.
         if (!$dbman->field_exists($table, $field)) {
@@ -688,7 +689,7 @@ function xmldb_zoom_upgrade($oldversion) {
         $table = new xmldb_table('zoom');
         // Define field recordings_visible_default to be added to zoom.
         $field = new xmldb_field('recordings_visible_default', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1',
-                'alternative_hosts');
+            'alternative_hosts');
 
         // Conditionally launch add field recordings_visible_default.
         if (!$dbman->field_exists($table, $field)) {
@@ -715,6 +716,17 @@ function xmldb_zoom_upgrade($oldversion) {
         // Zoom savepoint reached.
         upgrade_mod_savepoint(true, 2021112900, 'zoom');
     }
+
+    //@ShinonomePatched Start
+    if ($oldversion < 2021120901) {
+        $table = new xmldb_table('zoom');
+
+        $table->add_field('make_public_to_lti', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, 1);
+
+        // Zoom savepoint reached.
+        upgrade_mod_savepoint(true, 2021120901, 'zoom');
+    }
+    //@ShinonomePatched End
 
     return true;
 }
