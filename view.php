@@ -252,6 +252,13 @@ if ($isrecurringnotime) {
     $table->data[] = array($strtime, userdate($zoom->start_time));
     $table->data[] = array($strduration, format_time($zoom->duration));
 }
+//@ShinonomePatched Start
+if($zoom->make_public_to_lti){
+    $make_public_to_lti_btn = html_writer::div('公開動画へ移動する', 'btn btn-primary');
+    $link = html_writer::link(new moodle_url('https://example.com'), $make_public_to_lti_btn, ['target' => '_blank']);
+    $table->data[] = array('公開動画へ移動する', $link);
+}
+//@ShinonomePatched End
 
 // Show recordings section if option enabled to view recordings.
 if (!empty($config->viewrecordings)) {

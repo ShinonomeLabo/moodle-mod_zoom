@@ -25,8 +25,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_zoom';
-$plugin->version = 2021120900;
-$plugin->release = 'v4.3.1';
+//@ShinonomePatched Start
+$plugin->version = 2021120901;
+$plugin->release = 'v4.3.1.1';
+//@ShinonomePatched End
 $plugin->requires = 2017051500.00;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 0;

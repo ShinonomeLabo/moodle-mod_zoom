@@ -360,3 +360,8 @@ $string['zoom:refreshsessions'] = 'Refresh Zoom meeting reports';
 $string['zoom:view'] = 'View Zoom meetings';
 $string['zoom:viewdialin'] = 'View Zoom dial-in information';
 $string['zoom:viewjoinurl'] = 'View Zoom join url';
+
+//@ShinonomePatched Start
+$string['zoom:make_public_to_lti'] = '録画を公開する';
+$string['zoom:err_password_incompatible_kumadai'] = 'パスワード設定ルールが熊本大学のルールに準拠していません。';
+//@ShinonomePatched End
