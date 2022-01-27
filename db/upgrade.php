@@ -718,13 +718,15 @@ function xmldb_zoom_upgrade($oldversion)
     }
 
     //@ShinonomePatched Start
-    if ($oldversion < 2021120901) {
+    if ($oldversion < 2022012702) {
         $table = new xmldb_table('zoom');
-
-        $table->add_field('make_public_to_lti', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, 1);
+        $field = new xmldb_field('make_public_to_lti', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, 1, 'recordings_visible_default');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
 
         // Zoom savepoint reached.
-        upgrade_mod_savepoint(true, 2021120901, 'zoom');
+        upgrade_mod_savepoint(true, 2022012702, 'zoom');
     }
     //@ShinonomePatched End
 
